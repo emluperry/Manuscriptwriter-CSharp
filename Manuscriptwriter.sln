@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36109.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manuscriptwriter-CSharp", "Manuscriptwriter-CSharp\Manuscriptwriter-CSharp.csproj", "{DEC55EDC-4CA0-6451-CAAB-97E1E2475443}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSW-Console", "MSW-Console\MSW-Console.csproj", "{2BD291C7-357F-DEE4-B3CA-434EB61DD7F8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DEC55EDC-4CA0-6451-CAAB-97E1E2475443} = {DEC55EDC-4CA0-6451-CAAB-97E1E2475443}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DEC55EDC-4CA0-6451-CAAB-97E1E2475443}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEC55EDC-4CA0-6451-CAAB-97E1E2475443}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEC55EDC-4CA0-6451-CAAB-97E1E2475443}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEC55EDC-4CA0-6451-CAAB-97E1E2475443}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BD291C7-357F-DEE4-B3CA-434EB61DD7F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BD291C7-357F-DEE4-B3CA-434EB61DD7F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BD291C7-357F-DEE4-B3CA-434EB61DD7F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BD291C7-357F-DEE4-B3CA-434EB61DD7F8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5C48FCB3-2B24-4FD8-A41E-2F12B397C36C}
+	EndGlobalSection
+EndGlobal
