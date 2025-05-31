@@ -1,0 +1,7 @@
+Emily: Testing!
+
+When the player speaks with the Cat
+Cat: Meow
+
+When the player speaks with me
+Emily: How's it going?

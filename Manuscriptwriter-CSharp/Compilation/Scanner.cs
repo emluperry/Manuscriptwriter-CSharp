@@ -6,7 +6,6 @@ namespace MSW.Compiler
 {
     internal class Scanner
     {
-        private readonly string source;
         private readonly string[] lines;
         private int startIndex;
         private int endIndex;
@@ -20,7 +19,6 @@ namespace MSW.Compiler
 
         internal Scanner(string source)
         {
-            this.source = source;
             lines = source.Split(new string[] { "\n" }, StringSplitOptions.None);
 
             startIndex = 0;
@@ -28,6 +26,7 @@ namespace MSW.Compiler
 
             lastLine = lines.Length;
             line = 0;
+            this.currentLine = "";
         }
 
         internal List<Token> ScanLines()
@@ -272,25 +271,26 @@ namespace MSW.Compiler
             int length = identifier.Length;
             switch (identifier[0])
             {
-                case 'a': return CheckKeyword(1, 2, "nd", TokenType.AND);
-                case 'e': return CheckKeyword(1, 3, "lse", TokenType.ELSE);
+                case 'a': return CheckKeyword(1, "nd", TokenType.AND);
+                case 'e': return CheckKeyword(1, "lse", TokenType.ELSE);
                 case 'f':
                     if (length <= 1)
                         break;
                     switch (identifier[1])
                     {
-                        case 'a': return this.CheckKeyword(2, 3, "lse", TokenType.FALSE);
-                        case 'o': return this.CheckKeyword(2, 1, "r", TokenType.FOR);
+                        case 'a': return this.CheckKeyword(2, "lse", TokenType.FALSE);
+                        case 'o': return this.CheckKeyword(2, "r", TokenType.FOR);
                     }
                     break;
-                case 'g': return CheckKeyword(1, 4, "iven", TokenType.GIVEN);
+                case 'g': return CheckKeyword(2, "iven", TokenType.GIVEN);
+
                 case 'i':
                     if (length <= 1)
                         break;
                     switch (identifier[1])
                     {
-                        case 'f': return CheckKeyword(2, 0, "", TokenType.IF);
-                        case 's': return CheckKeyword(2, 0, "", TokenType.EQUAL_EQUAL);
+                        case 'f': return CheckKeyword(2, "", TokenType.IF);
+                        case 's': return CheckKeyword(2, "", TokenType.EQUAL_EQUAL);
                     }
 
                     break;
@@ -299,8 +299,8 @@ namespace MSW.Compiler
                         break;
                     switch (identifier[1])
                     {
-                        case 'o': return CheckKeyword(2, 1, "t", TokenType.NOT);
-                        case 'u': return CheckKeyword(2, 2, "ll", TokenType.NULL);
+                        case 'o': return CheckKeyword(2, "t", TokenType.NOT);
+                        case 'u': return CheckKeyword(2, "ll", TokenType.NULL);
                     }
                     break;
                 case 'o':
@@ -308,13 +308,13 @@ namespace MSW.Compiler
                         break;
                     switch (identifier[1])
                     {
-                        case 'r': return CheckKeyword(2, 0, "", TokenType.OR);
-                        case 't': return CheckKeyword(2, 7, "herwise", TokenType.ELSE);
+                        case 'r': return CheckKeyword(2, "", TokenType.OR);
+                        case 't': return CheckKeyword(2, "herwise", TokenType.ELSE);
                     }
                     break;
-                case 'p': return CheckKeyword(1, 4, "rint", TokenType.PRINT);
-                case 't': return CheckKeyword(1, 3, "rue", TokenType.TRUE);
-                case 'v': return CheckKeyword(1, 2, "ar", TokenType.VAR);
+                case 'p': return CheckKeyword(1, "rint", TokenType.PRINT);
+                case 't': return CheckKeyword(1, "rue", TokenType.TRUE);
+                case 'v': return CheckKeyword(1, "ar", TokenType.VAR);
                 case 'w':
                     if (length <= 1)
                         break;
@@ -324,8 +324,8 @@ namespace MSW.Compiler
                             break;
                         switch (identifier[2])
                         {
-                            case 'e': return CheckKeyword(3, 1, "n", TokenType.WHEN);
-                            case 'i': return CheckKeyword(3, 2, "le", TokenType.WHILE);
+                            case 'e': return CheckKeyword(3, "n", TokenType.WHEN);
+                            case 'i': return CheckKeyword(3, "le", TokenType.WHILE);
                         }
                     }
                     break;
@@ -344,8 +344,9 @@ namespace MSW.Compiler
             return TokenType.UNIDENTIFIED;
         }
 
-        private TokenType CheckKeyword(int start, int length, string rest, TokenType type)
+        private TokenType CheckKeyword(int start, string rest, TokenType type)
         {
+            int length = rest.Length;
             string keyword = this.currentLine.Substring(this.startIndex + start, length).ToLowerInvariant();
 
             if (this.currentIndex - this.startIndex == start + length && keyword == rest)

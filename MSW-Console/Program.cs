@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using MSW.Compiler;
+﻿using MSW.Compiler;
 using MSW.Events;
 using MSW.Scripting;
 
@@ -8,9 +6,19 @@ namespace MSW.Console
 {
     internal class Program
     {
+        private static ConsoleDialogue dialogue;
+
         static void Main(string[] args)
         {
-            RunCompiler(args[0]);
+            Manuscript script = RunCompiler(args[0]);
+
+            if (script == null)
+            {
+                System.Console.WriteLine("Error occurred! Please check the console for more details.");
+                return;
+            }
+
+            RunManuscript(script);
         }
 
         static void LogError(string message)
@@ -18,29 +26,28 @@ namespace MSW.Console
             System.Console.WriteLine(message);
         }
 
-        static void RunCompiler(string filePath)
+        static Manuscript RunCompiler(string filePath)
         {
             string data = File.ReadAllText(filePath);
             if (string.IsNullOrEmpty(data))
             {
                 System.Console.WriteLine("File is empty.");
-                return;
+                return null;
             }
 
-            var dialogue = new ConsoleDialogue() { consoleEvent = new RunnerEvent(), inputEvent = new RunnerEvent() };
+            dialogue = new ConsoleDialogue() { consoleEvent = new RunnerEvent(), inputEvent = new RunnerEvent() };
             var comp = new Compiler.Compiler()
             {
                 ErrorLogger = LogError,
                 FunctionLibrary = new List<object>() { dialogue }
             };
 
-            Manuscript script = comp.Compile(data);
-            if (script == null)
-            {
-                System.Console.WriteLine("Error occurred! Please check the console for more details.");
-                return;
-            }
+            return comp.Compile(data);
+            
+        }
 
+        static void RunManuscript(Manuscript script)
+        {
             var runner = new Runner(script) { Logger = LogError, OnFinish = () => { System.Console.WriteLine("Script finished."); } };
             runner.Run();
 

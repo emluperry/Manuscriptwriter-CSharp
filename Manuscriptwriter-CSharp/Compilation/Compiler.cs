@@ -11,8 +11,6 @@ namespace MSW.Compiler
         public Action<string> ErrorLogger;
 
         private bool hasError = false;
-        private Scanner scanner;
-        private Parser parser;
 
         public Manuscript Compile(string source)
         {
@@ -21,11 +19,11 @@ namespace MSW.Compiler
 
             try
             {
-                scanner = new Scanner(source);
+                Scanner scanner = new Scanner(source);
 
                 List<Token> tokens = scanner.ScanLines();
 
-                parser = new Parser(tokens, FunctionLibrary) { ReportTokenError = ReportTokenError };
+                Parser parser = new Parser(tokens, FunctionLibrary) { ReportTokenError = ReportTokenError };
                 statements = parser.Parse();
             }
             catch (Exception e)
@@ -39,8 +37,7 @@ namespace MSW.Compiler
                 return null;
             }
 
-            Manuscript script = new Manuscript(statements);
-            return script;
+            return new Manuscript(statements);
         }
 
         private void ReportTokenError(Token token, string message)
