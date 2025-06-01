@@ -12,7 +12,7 @@ namespace MSW.Compiler
 
         private bool hasError = false;
 
-        public Manuscript Compile(string source)
+        public Page Compile(string source)
         {
             hasError = false;
             IEnumerable<Statement> statements = Enumerable.Empty<Statement>();
@@ -37,7 +37,7 @@ namespace MSW.Compiler
                 return null;
             }
 
-            return new Manuscript(statements);
+            return new Page() { statements = statements };
         }
 
         private void ReportTokenError(Token token, string message)

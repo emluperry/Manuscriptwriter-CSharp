@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace MSW.Scripting
+﻿namespace MSW.Scripting
 {
     internal class Environment
     {

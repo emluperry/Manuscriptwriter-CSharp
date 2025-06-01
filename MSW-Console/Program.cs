@@ -10,7 +10,7 @@ namespace MSW.Console
 
         static void Main(string[] args)
         {
-            Manuscript script = RunCompiler(args[0]);
+            Page script = RunCompiler(args[0]);
 
             if (script == null)
             {
@@ -26,7 +26,7 @@ namespace MSW.Console
             System.Console.WriteLine(message);
         }
 
-        static Manuscript RunCompiler(string filePath)
+        static Page RunCompiler(string filePath)
         {
             string data = File.ReadAllText(filePath);
             if (string.IsNullOrEmpty(data))
@@ -46,7 +46,7 @@ namespace MSW.Console
             
         }
 
-        static void RunManuscript(Manuscript script)
+        static void RunManuscript(Page script)
         {
             var runner = new Runner(script) { Logger = LogError, OnFinish = () => { System.Console.WriteLine("Script finished."); } };
             runner.Run();

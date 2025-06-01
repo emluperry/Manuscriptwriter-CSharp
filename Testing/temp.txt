@@ -1,7 +1,14 @@
-Emily: Testing!
+Emily: Welcome to Manuscriptwriter!
 
 When the player speaks with the Cat
 Cat: Meow
 
 When the player speaks with me
 Emily: How's it going?
+# Turn to passage QUESTION
+
+Passage QUESTION
+Emily: You just used a passage jump!
+
+Passage TEST
+Emily: Testing!

@@ -312,7 +312,16 @@ namespace MSW.Compiler
                         case 't': return CheckKeyword(2, "herwise", TokenType.ELSE);
                     }
                     break;
-                case 'p': return CheckKeyword(1, "rint", TokenType.PRINT);
+                case 'p':
+                    if (length <= 1)
+                        break;
+                    switch (identifier[1])
+                    {
+                        case 'a': return CheckKeyword(2, "ssage", TokenType.PASSAGE);
+                        case 'r': return CheckKeyword(2, "int", TokenType.PRINT);
+                    }
+                    break;
+
                 case 't': return CheckKeyword(1, "rue", TokenType.TRUE);
                 case 'v': return CheckKeyword(1, "ar", TokenType.VAR);
                 case 'w':
@@ -331,7 +340,7 @@ namespace MSW.Compiler
                     break;
             }
 
-            if (previousToken.type == TokenType.VAR)
+            if (previousToken.type == TokenType.VAR || previousToken.type == TokenType.PASSAGE)
             {
                 return TokenType.IDENTIFIER;
             }

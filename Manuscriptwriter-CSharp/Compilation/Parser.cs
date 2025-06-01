@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using MSW.Events;
 using MSW.Reflection;
@@ -147,7 +144,7 @@ namespace MSW.Compiler
                     continue;
                 }
 
-                var s = this.Declaration();
+                Statement s = this.Declaration();
 
                 if (s != null)
                 {
@@ -315,6 +312,11 @@ namespace MSW.Compiler
 
         private Statement Statement()
         {
+            if(this.TryConsumeToken(TokenType.PASSAGE, out Token passageToken))
+            {
+                return this.PassageStatement();
+            }
+
             if (this.TryConsumeToken(TokenType.WHEN, out Token whenToken))
             {
                 return this.WhenStatement();
@@ -348,6 +350,18 @@ namespace MSW.Compiler
             Expression value = this.Expression();
             this.ConsumeOneOfTokens(new List<TokenType> { TokenType.COMMA, TokenType.EOL, TokenType.EOF }, "[ManuScriptwriter] Expected the line to end - make sure each sentence is on its own line.");
             return new StatementExpression(value);
+        }
+
+        private Statement PassageStatement()
+        {
+            if (!this.TryConsumeToken(TokenType.IDENTIFIER, out Token identifierToken))
+            {
+                throw this.ParseError(identifierToken, "[ManuScriptwriter] Passages must have some form of identifier!");
+            }
+
+            var body = new Block(this.Block());
+
+            return new Passage(identifierToken, body);
         }
 
         private Statement WhenStatement()

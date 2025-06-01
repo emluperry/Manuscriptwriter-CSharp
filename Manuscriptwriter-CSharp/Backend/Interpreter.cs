@@ -22,10 +22,10 @@ namespace MSW.Scripting
 
         private List<IRunnerEvent> activeEvents = new List<IRunnerEvent>();
 
-        public Interpreter(Manuscript manuscript)
+        public Interpreter(Page page)
         {
             this.environmentStack = new Stack<Environment>();
-            this.environmentStack.Push(new Environment(manuscript.statements));
+            this.environmentStack.Push(new Environment(page.statements));
         }
 
         ~Interpreter()
@@ -429,6 +429,13 @@ namespace MSW.Scripting
             {
                 this.activeEvents.Add(visitor.runnerEvent);
             }
+
+            return true;
+        }
+
+        public bool VisitPassageBlock(Passage visitor)
+        {
+            // register the passage
 
             return true;
         }
