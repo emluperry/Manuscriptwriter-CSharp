@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace MSW.Scripting
 {
-    public class Page
+    public class Manuscript
     {
         internal IEnumerable<Statement> statements;
     }

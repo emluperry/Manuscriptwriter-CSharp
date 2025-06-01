@@ -11,7 +11,7 @@ namespace MSW.Compiler
         public Action OnFinish;
 
         private Interpreter interpreter;
-        public Runner(Page manuscript)
+        public Runner(Manuscript manuscript)
         {
             interpreter = new Interpreter(manuscript) { ReportRuntimeError = ReportRuntimeError, OnFinish = RunOnFinish };
         }

@@ -22,10 +22,10 @@ namespace MSW.Scripting
 
         private List<IRunnerEvent> activeEvents = new List<IRunnerEvent>();
 
-        public Interpreter(Page page)
+        public Interpreter(Manuscript script)
         {
             this.environmentStack = new Stack<Environment>();
-            this.environmentStack.Push(new Environment(page.statements));
+            this.environmentStack.Push(new Environment(script.statements));
         }
 
         ~Interpreter()
