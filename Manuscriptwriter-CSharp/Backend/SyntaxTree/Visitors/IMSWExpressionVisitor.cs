@@ -12,5 +12,6 @@ namespace MSW.Scripting
         object VisitLogical(Logical visitor);
 
         object VisitCall(Call visitor);
+        object VisitGoto(Goto visitor);
     }
 }

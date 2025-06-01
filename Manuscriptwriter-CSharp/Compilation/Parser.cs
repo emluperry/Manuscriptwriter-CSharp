@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using MSW.Events;
 using MSW.Reflection;
@@ -282,6 +285,10 @@ namespace MSW.Compiler
         {
             try
             {
+                if (this.TryConsumeToken(TokenType.PASSAGE, out Token passageToken))
+                {
+                    return this.PassageStatement();
+                }
                 if (this.TryConsumeToken(TokenType.VAR, out Token var))
                 {
                     return this.VarDeclaration();
@@ -312,11 +319,6 @@ namespace MSW.Compiler
 
         private Statement Statement()
         {
-            if(this.TryConsumeToken(TokenType.PASSAGE, out Token passageToken))
-            {
-                return this.PassageStatement();
-            }
-
             if (this.TryConsumeToken(TokenType.WHEN, out Token whenToken))
             {
                 return this.WhenStatement();
@@ -356,7 +358,7 @@ namespace MSW.Compiler
         {
             if (!this.TryConsumeToken(TokenType.IDENTIFIER, out Token identifierToken))
             {
-                throw this.ParseError(identifierToken, "[ManuScriptwriter] Passages must have some form of identifier!");
+                throw this.ParseError(identifierToken, "[ManuScriptwriter] Passages must have some form of identifier/name!");
             }
 
             var body = new Block(this.Block());
@@ -443,7 +445,10 @@ namespace MSW.Compiler
                 body = new Block(new List<Statement>() { body, new StatementExpression(increment) });
             }
 
-            condition ??= new Literal(true);
+            if(condition == null)
+            {
+                condition = new Literal(true);
+            }
 
             body = new While(condition, body);
 
@@ -615,6 +620,13 @@ namespace MSW.Compiler
 
                 // return new call with expressions
                 return new Call(function, func, target, args);
+            }
+
+            if(this.TryConsumeToken(TokenType.GOTO, out Token Goto))
+            {
+                Expression callee = this.Primary();
+
+                return new Goto(Goto, callee);
             }
 
             return this.Primary();

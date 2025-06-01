@@ -5,10 +5,11 @@ Cat: Meow
 
 When the player speaks with me
 Emily: How's it going?
-# Turn to passage QUESTION
+Go to QUESTION
 
 Passage QUESTION
 Emily: You just used a passage jump!
+Emily: John I'm going to sling you in a fucking moment-
 
 Passage TEST
 Emily: Testing!

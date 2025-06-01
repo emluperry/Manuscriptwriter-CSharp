@@ -1,6 +1,5 @@
-using System;
-using System.Collections.Generic;
 using MSW.Events;
+using System.Collections.Generic;
 
 namespace MSW.Scripting
 {

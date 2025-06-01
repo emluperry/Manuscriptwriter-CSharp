@@ -168,6 +168,7 @@ namespace MSW.Scripting
         private void ExecuteBlock(Environment blockEnvironment)
         {
             this.environmentStack.Push(blockEnvironment);
+            IsFinished = false;
         }
 
         private bool IsTrue(object obj)
@@ -354,6 +355,18 @@ namespace MSW.Scripting
             return output;
         }
 
+        public object VisitGoto(Goto visitor)
+        {
+            object obj = this.Evaluate(visitor.passageID);
+
+            if (obj is Passage psg)
+            {
+                return this.Execute(psg.body);
+            }
+
+            throw new MSWRuntimeException(visitor.token, "[ManuScriptwriter] Can't jump to anything that isn't a passage! Double check your spelling.");
+        }
+
         #endregion
 
         #region STATEMENT VISITORS
@@ -435,7 +448,7 @@ namespace MSW.Scripting
 
         public bool VisitPassageBlock(Passage visitor)
         {
-            // register the passage
+            environment.Define(visitor.id.lexeme, visitor);
 
             return true;
         }

@@ -1,4 +1,6 @@
-﻿namespace MSW.Scripting
+﻿using System.Collections.Generic;
+
+namespace MSW.Scripting
 {
     public class Page
     {
