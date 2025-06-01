@@ -37,7 +37,7 @@ namespace MSW.Compiler
                 return null;
             }
 
-            return new Manuscript(statements);
+            return new Manuscript() { statements = statements };
         }
 
         private void ReportTokenError(Token token, string message)

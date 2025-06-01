@@ -12,9 +12,10 @@ namespace MSW.Scripting
         EQUAL, EQUAL_EQUAL, NOT, NOT_EQUAL,
         GREATER, GREATER_EQUAL, LESS, LESS_EQUAL,
 
+        // Booleans
         AND, OR,
 
-        // Literals and Types
+        // -- Literals and Types
         IDENTIFIER, STRING, DOUBLE,
 
         // -- Keywords
@@ -33,9 +34,14 @@ namespace MSW.Scripting
         FUNCTION, EVENT,
         GIVEN,
 
-        // Baked functions
+        GOTO,
+
+        // -- Baked functions
         PRINT, // Prints to console.
 
-        EOF, EOL, UNIDENTIFIED, ERROR
+        // Statement End Tokens
+        EOF, EOL, UNIDENTIFIED, ERROR,
+
+        SUGAR, // as in syntactic sugar - a word that adds to the flow of the code but isn't necessary for it
     }
 }

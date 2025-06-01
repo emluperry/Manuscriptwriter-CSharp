@@ -132,6 +132,11 @@ namespace MSW.Compiler
                 this.identifiers[nextToken.lexeme] = nextToken;
             }
 
+            if(nextToken.type == TokenType.SUGAR)
+            {
+                return null;
+            }
+
             return nextToken;
         }
 
@@ -282,7 +287,16 @@ namespace MSW.Compiler
                         case 'o': return this.CheckKeyword(2, "r", TokenType.FOR);
                     }
                     break;
-                case 'g': return CheckKeyword(2, "iven", TokenType.GIVEN);
+
+                case 'g':
+                    if (length <= 1)
+                        break;
+                    switch (identifier[1])
+                    {
+                        case 'i': return CheckKeyword(2, "ven", TokenType.GIVEN);
+                        case 'o': return this.CheckKeyword(2, "", TokenType.GOTO);
+                    }
+                    break;
 
                 case 'i':
                     if (length <= 1)
@@ -312,8 +326,31 @@ namespace MSW.Compiler
                         case 't': return CheckKeyword(2, "herwise", TokenType.ELSE);
                     }
                     break;
-                case 'p': return CheckKeyword(1, "rint", TokenType.PRINT);
-                case 't': return CheckKeyword(1, "rue", TokenType.TRUE);
+                case 'p':
+                    if (length <= 1)
+                        break;
+                    switch (identifier[1])
+                    {
+                        case 'a': return CheckKeyword(2, "ssage", TokenType.PASSAGE);
+                        case 'r': return CheckKeyword(2, "int", TokenType.PRINT);
+                    }
+                    break;
+
+                case 't':
+                    if (length <= 1)
+                        break;
+                    switch (identifier[1])
+                    {
+                        case 'o':
+                            if(previousToken.type == TokenType.GOTO && CheckKeyword(2, "", TokenType.SUGAR) == TokenType.SUGAR)
+                            {
+                                return TokenType.SUGAR;
+                            }
+                            break;
+                        case 'r': return CheckKeyword(2, "ue", TokenType.TRUE);
+                    }
+                    break;
+
                 case 'v': return CheckKeyword(1, "ar", TokenType.VAR);
                 case 'w':
                     if (length <= 1)
@@ -331,17 +368,19 @@ namespace MSW.Compiler
                     break;
             }
 
-            if (previousToken.type == TokenType.VAR)
-            {
-                return TokenType.IDENTIFIER;
-            }
+            //if (previousToken.type == TokenType.VAR || previousToken.type == TokenType.PASSAGE)
+            //{
+            //    return TokenType.IDENTIFIER;
+            //}
 
-            if (this.identifiers.TryGetValue(this.currentLine.Substring(startIndex, currentIndex - startIndex), out Token val))
-            {
-                return TokenType.IDENTIFIER;
-            }
+            return TokenType.IDENTIFIER;
 
-            return TokenType.UNIDENTIFIED;
+            //if (this.identifiers.TryGetValue(this.currentLine.Substring(startIndex, currentIndex - startIndex), out Token val))
+            //{
+            //    return TokenType.IDENTIFIER;
+            //}
+
+            //return TokenType.UNIDENTIFIED;
         }
 
         private TokenType CheckKeyword(int start, string rest, TokenType type)

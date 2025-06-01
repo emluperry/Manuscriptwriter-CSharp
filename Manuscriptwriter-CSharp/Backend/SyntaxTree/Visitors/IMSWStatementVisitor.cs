@@ -14,5 +14,6 @@
         bool VisitWhileBlock(While visitor);
 
         bool VisitWhenBlock(When visitor);
+        bool VisitPassageBlock(Passage visitor);
     }
 }

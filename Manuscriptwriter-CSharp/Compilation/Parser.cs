@@ -147,7 +147,7 @@ namespace MSW.Compiler
                     continue;
                 }
 
-                var s = this.Declaration();
+                Statement s = this.Declaration();
 
                 if (s != null)
                 {
@@ -285,6 +285,10 @@ namespace MSW.Compiler
         {
             try
             {
+                if (this.TryConsumeToken(TokenType.PASSAGE, out Token passageToken))
+                {
+                    return this.PassageStatement();
+                }
                 if (this.TryConsumeToken(TokenType.VAR, out Token var))
                 {
                     return this.VarDeclaration();
@@ -348,6 +352,18 @@ namespace MSW.Compiler
             Expression value = this.Expression();
             this.ConsumeOneOfTokens(new List<TokenType> { TokenType.COMMA, TokenType.EOL, TokenType.EOF }, "[ManuScriptwriter] Expected the line to end - make sure each sentence is on its own line.");
             return new StatementExpression(value);
+        }
+
+        private Statement PassageStatement()
+        {
+            if (!this.TryConsumeToken(TokenType.IDENTIFIER, out Token identifierToken))
+            {
+                throw this.ParseError(identifierToken, "[ManuScriptwriter] Passages must have some form of identifier/name!");
+            }
+
+            var body = new Block(this.Block());
+
+            return new Passage(identifierToken, body);
         }
 
         private Statement WhenStatement()
@@ -429,7 +445,10 @@ namespace MSW.Compiler
                 body = new Block(new List<Statement>() { body, new StatementExpression(increment) });
             }
 
-            condition ??= new Literal(true);
+            if(condition == null)
+            {
+                condition = new Literal(true);
+            }
 
             body = new While(condition, body);
 
@@ -601,6 +620,13 @@ namespace MSW.Compiler
 
                 // return new call with expressions
                 return new Call(function, func, target, args);
+            }
+
+            if(this.TryConsumeToken(TokenType.GOTO, out Token Goto))
+            {
+                Expression callee = this.Primary();
+
+                return new Goto(Goto, callee);
             }
 
             return this.Primary();

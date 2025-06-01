@@ -1,6 +1,9 @@
 ﻿using MSW.Compiler;
 using MSW.Events;
 using MSW.Scripting;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
 namespace MSW.Console
 {
@@ -51,14 +54,22 @@ namespace MSW.Console
             var runner = new Runner(script) { Logger = LogError, OnFinish = () => { System.Console.WriteLine("Script finished."); } };
             runner.Run();
 
+            RunLoop(runner);
+
+            dialogue.inputEvent.FireEvent(null, new RunnerEventArgs(new List<object>() { "the player", "me" }));
+            RunLoop(runner);
+
+            dialogue.inputEvent.FireEvent(null, new RunnerEventArgs(new List<object>() { "the player", "Cat" }));
+            RunLoop(runner);
+        }
+
+        static void RunLoop(Runner runner)
+        {
             while (!runner.IsFinished())
             {
                 System.Console.ReadLine();
                 dialogue.consoleEvent.FireEvent(null, null);
             }
-
-            dialogue.inputEvent.FireEvent(null, new RunnerEventArgs(new List<object>() { "the player", "me" }));
-            dialogue.inputEvent.FireEvent(null, new RunnerEventArgs(new List<object>() { "the player", "Cat" }));
         }
     }
 }

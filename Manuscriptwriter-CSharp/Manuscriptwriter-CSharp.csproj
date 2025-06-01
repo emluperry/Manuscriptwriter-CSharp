@@ -2,10 +2,8 @@
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFramework>net9.0</TargetFramework>
-    <RootNamespace>MSW_Scripting</RootNamespace>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <TargetFramework>net48</TargetFramework>
+    <RootNamespace>MSW.Scripting</RootNamespace>
   </PropertyGroup>
 
 </Project>

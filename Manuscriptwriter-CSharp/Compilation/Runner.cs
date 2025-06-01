@@ -10,11 +10,9 @@ namespace MSW.Compiler
         public Action<string> Logger;
         public Action OnFinish;
 
-        private Manuscript manuscript;
         private Interpreter interpreter;
         public Runner(Manuscript manuscript)
         {
-            this.manuscript = manuscript;
             interpreter = new Interpreter(manuscript) { ReportRuntimeError = ReportRuntimeError, OnFinish = RunOnFinish };
         }
 
