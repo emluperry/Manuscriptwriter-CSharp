@@ -7,6 +7,7 @@
 
         public Goto(Token token, Expression passageID)
         {
+            this.token = token;
             this.passageID = passageID;
         }
 

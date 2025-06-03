@@ -51,7 +51,7 @@ namespace MSW.Console
 
         static void RunManuscript(Manuscript script)
         {
-            var runner = new Runner(script) { Logger = LogError, OnFinish = () => { System.Console.WriteLine("Script finished."); } };
+            var runner = new Runner(script, new ConsoleInput()) { Logger = LogError, OnFinish = () => { System.Console.WriteLine("Script finished."); } };
             runner.Run();
 
             RunLoop(runner);

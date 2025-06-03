@@ -15,5 +15,6 @@
 
         bool VisitWhenBlock(When visitor);
         bool VisitPassageBlock(Passage visitor);
+        bool VisitSelectStatement(Select visitor);
     }
 }

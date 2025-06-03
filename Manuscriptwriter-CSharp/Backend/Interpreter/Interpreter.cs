@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MSW.Events;
+using MSW.Input;
 using MSW.Reflection;
 
 namespace MSW.Scripting
@@ -13,6 +14,10 @@ namespace MSW.Scripting
 
         internal bool IsFinished { get; private set; }
         internal Action OnFinish;
+
+        // Input Handling
+        public List<Choice> choices = null;
+        public IChoiceHandler ChoiceHandler = null;
 
         // Error reporting
         public Action<MSWRuntimeException> ReportRuntimeError;
@@ -151,6 +156,15 @@ namespace MSW.Scripting
         {
             this.PauseEvent?.UnregisterEvent(HandlePauseEvent);
             this.PauseEvent = null;
+
+            this.RunUntilBreak();
+        }
+
+        private void HandleChoice(object sender, int index)
+        {
+            this.ChoiceHandler.OnChoiceSet -= HandleChoice;
+
+            this.Execute(this.choices[index].consequence);
 
             this.RunUntilBreak();
         }
@@ -449,6 +463,27 @@ namespace MSW.Scripting
         public bool VisitPassageBlock(Passage visitor)
         {
             environment.Define(visitor.id.lexeme, visitor);
+
+            return true;
+        }
+
+        public bool VisitSelectStatement(Select visitor)
+        {
+            this.choices = visitor.choices;
+            List<string> choices = this.choices.Select(c => this.Evaluate(c.choice) as string).ToList();
+
+            if(choices.Count <= 0)
+            {
+                this.ReportRuntimeError(new MSWRuntimeException(visitor.choiceStart, "No choices found!"));
+                return false;
+            }
+
+            var ctx = new Context();
+            this.ChoiceHandler.OnChoiceSet += this.HandleChoice;
+            this.ChoiceHandler.ShowChoices(ctx, choices);
+
+            // Handle Context
+            this.HandleContext(ctx);
 
             return true;
         }

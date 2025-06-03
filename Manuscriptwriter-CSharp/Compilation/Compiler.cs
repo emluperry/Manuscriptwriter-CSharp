@@ -53,12 +53,6 @@ namespace MSW.Compiler
             }
         }
 
-        private void ReportRuntimeError(MSWRuntimeException ex)
-        {
-            hasError = true;
-            this.Report(ex.operatorToken.line, "", ex.Message);
-        }
-
         private void Report(int line, string where, string message)
         {
             ErrorLogger?.Invoke($"[Line {line} - {where}]: {message}");

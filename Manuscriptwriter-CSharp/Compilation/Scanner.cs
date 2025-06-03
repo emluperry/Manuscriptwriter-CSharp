@@ -332,6 +332,7 @@ namespace MSW.Compiler
                     switch (identifier[1])
                     {
                         case 'a': return CheckKeyword(2, "ssage", TokenType.PASSAGE);
+                        case 'i': return CheckKeyword(2, "ck", TokenType.PICK);
                         case 'r': return CheckKeyword(2, "int", TokenType.PRINT);
                     }
                     break;

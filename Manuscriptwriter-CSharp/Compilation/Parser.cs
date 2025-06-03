@@ -147,7 +147,7 @@ namespace MSW.Compiler
                     continue;
                 }
 
-                Statement s = this.Declaration();
+                Statement s = this.ParseStatements();
 
                 if (s != null)
                 {
@@ -281,20 +281,11 @@ namespace MSW.Compiler
 
         #region STATEMENTS
 
-        private Statement Declaration()
+        private Statement ParseStatements()
         {
             try
             {
-                if (this.TryConsumeToken(TokenType.PASSAGE, out Token passageToken))
-                {
-                    return this.PassageStatement();
-                }
-                if (this.TryConsumeToken(TokenType.VAR, out Token var))
-                {
-                    return this.VarDeclaration();
-                }
-
-                return this.Statement();
+                return this.Declaration();
             }
             catch (MSWParseException)
             {
@@ -303,18 +294,22 @@ namespace MSW.Compiler
             }
         }
 
-        private Statement VarDeclaration()
+        private Statement Declaration()
         {
-            Token token = this.ConsumeToken(TokenType.IDENTIFIER, "[ManuScriptwriter] After the 'var' keyword, a name for the new variable was expected.");
-
-            Expression initialiser = null;
-            if (this.TryConsumeToken(TokenType.EQUAL, out Token equals))
+            if (this.TryConsumeToken(TokenType.PASSAGE, out Token passageToken))
             {
-                initialiser = this.Expression();
+                return this.PassageStatement();
+            }
+            if (this.TryConsumeToken(TokenType.PICK, out Token selectToken))
+            {
+                return this.SelectStatement(selectToken);
+            }
+            if (this.TryConsumeToken(TokenType.VAR, out Token var))
+            {
+                return this.VarDeclaration();
             }
 
-            this.ConsumeOneOfTokens(new List<TokenType> { TokenType.COMMA, TokenType.EOL, TokenType.EOF }, "[ManuScriptwriter] After creating a new variable, move to a new line.");
-            return new VarDeclaration(token, initialiser);
+            return this.Statement();
         }
 
         private Statement Statement()
@@ -364,6 +359,48 @@ namespace MSW.Compiler
             var body = new Block(this.Block());
 
             return new Passage(identifierToken, body);
+        }
+
+        private Statement SelectStatement(Token selectToken)
+        {
+            this.TryConsumeToken(TokenType.COMMA, out _);
+            if(!this.TryConsumeToken(TokenType.EOL, out Token eol))
+            {
+                this.ParseError(eol, "[ManuScriptwriter] Choices should be listed on following lines.");
+            }
+
+            var choices = new List<Choice>();
+            while(TryConsumeToken(TokenType.MINUS, out Token dashToken))
+            {
+                Expression option = this.Expression();
+                this.TryConsumeToken(TokenType.EOL, out Token _);
+                Statement consequence = this.Statement();
+
+                var choice = new Choice(option, consequence);
+                choices.Add(choice);
+            }
+
+            if(!choices.Any())
+            {
+                throw this.ParseError(eol, "[ManuScriptwriter] Didn't find any choices after the word 'Pick' - choices should be listed following dashes '-' in the format [- \"Choice\" - Consequence].");
+            }
+            
+
+            return new Select(selectToken, choices);
+        }
+
+        private Statement VarDeclaration()
+        {
+            Token token = this.ConsumeToken(TokenType.IDENTIFIER, "[ManuScriptwriter] After the 'var' keyword, a name for the new variable was expected.");
+
+            Expression initialiser = null;
+            if (this.TryConsumeToken(TokenType.EQUAL, out Token equals))
+            {
+                initialiser = this.Expression();
+            }
+
+            this.ConsumeOneOfTokens(new List<TokenType> { TokenType.COMMA, TokenType.EOL, TokenType.EOF }, "[ManuScriptwriter] After creating a new variable, move to a new line.");
+            return new VarDeclaration(token, initialiser);
         }
 
         private Statement WhenStatement()
@@ -478,7 +515,7 @@ namespace MSW.Compiler
                     continue;
                 }
 
-                statements.Add(this.Declaration());
+                statements.Add(this.ParseStatements());
             }
             return statements;
         }

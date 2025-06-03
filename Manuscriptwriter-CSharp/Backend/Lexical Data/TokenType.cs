@@ -39,6 +39,9 @@ namespace MSW.Scripting
         // -- Baked functions
         PRINT, // Prints to console.
 
+        // Input
+        PICK,
+
         // Statement End Tokens
         EOF, EOL, UNIDENTIFIED, ERROR,
 

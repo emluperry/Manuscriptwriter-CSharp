@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using MSW.Input;
 using MSW.Scripting;
 
 namespace MSW.Compiler
@@ -11,9 +11,9 @@ namespace MSW.Compiler
         public Action OnFinish;
 
         private Interpreter interpreter;
-        public Runner(Manuscript manuscript)
+        public Runner(Manuscript manuscript, IChoiceHandler inputHandler)
         {
-            interpreter = new Interpreter(manuscript) { ReportRuntimeError = ReportRuntimeError, OnFinish = RunOnFinish };
+            interpreter = new Interpreter(manuscript) { ReportRuntimeError = ReportRuntimeError, OnFinish = RunOnFinish, ChoiceHandler = inputHandler };
         }
 
         public bool IsFinished()
