@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace MSW.Console
 {
-    internal class ConsoleInput : IChoiceHandler
+    internal class ConsoleChoiceHandler : IChoiceHandler
     {
         public Action<object, int> OnChoiceSet { get; set; }
 

@@ -166,6 +166,7 @@ namespace MSW.Scripting
 
             this.Execute(this.choices[index].consequence);
 
+            this.PauseEvent = null;
             this.RunUntilBreak();
         }
 
@@ -478,6 +479,7 @@ namespace MSW.Scripting
                 return false;
             }
 
+            this.PauseEvent = new RunnerEvent();
             var ctx = new Context();
             this.ChoiceHandler.OnChoiceSet += this.HandleChoice;
             this.ChoiceHandler.ShowChoices(ctx, choices);
