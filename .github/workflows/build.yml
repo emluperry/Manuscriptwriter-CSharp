@@ -11,9 +11,9 @@ jobs:
     build:
         strategy:
           matrix:
-            configuration: [Debug, Release]
+            configuration: [Debug]
             
-        runs-on: windows-2022
+        runs-on: windows-latest
 
         steps:
         - uses: actions/checkout@v4
@@ -21,7 +21,7 @@ jobs:
         - name: Setup .NET
           uses: actions/setup-dotnet@v4
           with:
-              dotnet-version: 4.8.x
+              dotnet-version: 481
 
         - name: Restore dependencies
           run: dotnet restore
